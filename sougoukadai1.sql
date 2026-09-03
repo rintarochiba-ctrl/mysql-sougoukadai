@@ -1,0 +1,142 @@
+-- **1. テーブルの作成** 以下の3つのテーブルを作成してください。
+--1. **usersテーブル**（ユーザー情報）
+-- - **カラム定義**:
+--     - `id`: ユーザーID（INT型、主キー、自動インクリメント）
+--     - `name`: ユーザー名（VARCHAR型、最大50文字）
+--     - `email`: メールアドレス（VARCHAR型、最大100文字、一意制約付き）
+--     - `created_at`: 作成日（DATE型、現在の日付をデフォルト値として設定）
+--     - `updated_at`: 更新日（DATE型、現在の日付をデフォルト値として設定、更新されれば、更新日を設定する）
+-- mysql> CREATE TABLE users (
+-- id INT AUTO_INCREMENT PRIMARY KEY,
+-- name VARCHAR(50) NOT NULL,
+-- email VARCHAR(100) NOT NULL UNIQUE,
+-- created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+-- updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+-- );
+-- mysql> SELECT * FROM users;
+-- +----+--------------+----------------------+---------------------+---------------------+
+-- | id | name         | email                | created_at          | updated_at          |
+-- +----+--------------+----------------------+---------------------+---------------------+
+-- |  1 | 田中太郎     | tanaka@example.com   | 2026-09-02 11:56:52 | 2026-09-02 11:56:52 |
+-- |  2 | 佐藤花子     | sato@example.com     | 2026-09-02 11:56:52 | 2026-09-02 11:56:52 |
+-- |  3 | 山本次郎     | yamamoto@example.com | 2026-09-02 11:56:52 | 2026-09-02 11:56:52 |
+-- +----+--------------+----------------------+---------------------+---------------------+
+
+
+--2. **productsテーブル**（商品情報）
+--     - **カラム定義**:
+--         - `id`: 商品ID（INT型、主キー、自動インクリメント）
+--         - `name`: 商品名（VARCHAR型、最大100文字）
+--         - `price`: 価格（INT型）
+--         - `stock`: 在庫数（INT型）
+--         - `created_at`: 作成日（DATE型、現在の日付をデフォルト値として設定）
+--         - `updated_at`: 更新日（DATE型、現在の日付をデフォルト値として設定、更新されれば、更新日を設定する）
+-- mysql> CREATE TABLE products (
+-- id INT AUTO_INCREMENT PRIMARY KEY,
+-- name VARCHAR(100) NOT NULL,
+-- price INT,
+-- stock INT,
+-- created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+-- updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+-- );
+-- mysql> SELECT * FROM products;
+-- +----+-----------------------+--------+-------+---------------------+---------------------+
+-- | id | name                  | price  | stock | created_at          | updated_at          |
+-- +----+-----------------------+--------+-------+---------------------+---------------------+
+-- |  1 | ノートパソコン        | 120000 |    20 | 2026-09-02 12:03:00 | 2026-09-02 12:03:00 |
+-- |  2 | スマートフォン        |  80000 |    15 | 2026-09-02 12:03:00 | 2026-09-02 12:03:00 |
+-- |  3 | タブレット            |  60000 |    30 | 2026-09-02 12:03:00 | 2026-09-02 12:03:00 |
+-- +----+-----------------------+--------+-------+---------------------+---------------------+
+
+--3. **ordersテーブル**（注文情報）
+--     - **カラム定義**:
+--         - `id`: 注文ID（INT型、主キー、自動インクリメント）
+--         - `user_id`: ユーザーID（INT型、外部キーとしてUSERSテーブルを参照）
+--         - `product_id`: 商品ID（INT型、外部キーとしてPRODUCTSテーブルを参照）
+--         - `quantity`: 購入数量（INT型）
+--         - `order_date`: 注文日（DATE型、現在の日付をデフォルト値として設定）
+--         - `created_at`: 作成日（DATE型、現在の日付をデフォルト値として設定）
+--         - `updated_at`: 更新日（DATE型、現在の日付をデフォルト値として設定、更新されれば、更新日を設定する）
+-- mysql> CREATE TABLE orders (
+-- id INT AUTO_INCREMENT PRIMARY KEY,
+-- user_id INT NOT NULL,
+-- product_id INT NOT NULL,
+-- quantity INT NOT NULL,
+-- order_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+-- created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+-- updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+-- );
+-- mysql> SELECT * FROM orders;
+-- +----+---------+------------+----------+---------------------+---------------------+---------------------+
+-- | id | user_id | product_id | quantity | order_date          | created_at          | updated_at          |
+-- +----+---------+------------+----------+---------------------+---------------------+---------------------+
+-- |  1 |       1 |          1 |        2 | 2026-09-02 11:57:05 | 2026-09-02 11:57:05 | 2026-09-02 11:57:05 |
+-- |  2 |       2 |          2 |        1 | 2026-09-02 11:57:05 | 2026-09-02 11:57:05 | 2026-09-02 11:57:05 |
+-- |  3 |       3 |          3 |        3 | 2026-09-02 11:57:05 | 2026-09-02 11:57:05 | 2026-09-02 11:57:05 |
+-- +----+---------+------------+----------+---------------------+---------------------+---------------------+
+
+--2. データの挿入 以下のデータをSQLを使って挿入してください。 ※`created_at` と`updated_at` については、作成日と更新日が挿入されるようにする
+-- **usersテーブル**:
+    -- `田中太郎`, `tanaka@example.com`
+    -- `佐藤花子`, `sato@example.com`
+    -- `山本次郎`, `yamamoto@example.com`
+-- **productsテーブル**:
+    -- `ノートパソコン`, `120,000`, `20`
+    -- `スマートフォン`, `80,000`, `15`
+    -- `タブレット`, `60,000`, `30`
+-- **ordersテーブル**:
+    -- `田中太郎`が`ノートパソコン`を2台購入
+    -- `佐藤花子`が`スマートフォン`を1台購入
+    -- `山本次郎`が`タブレット`を3台購入
+-- mysql> INSERT INTO users (name, email) VALUES ('田中太郎', 'tanaka@example.com'),('佐藤花子', 'sato@example.com'),('山本次郎', 'yamamoto@example.com');
+-- mysql> INSERT INTO products (name, price, stock) VALUES ('ノートパソコン', 120000, 20),('スマートフォン', 80000, 15),('タブレット', 60000, 30);
+-- mysql> INSERT INTO orders (user_id, product_id, quantity) VALUES (1, 1, 2),(2, 2, 1),(3, 3, 3);
+
+--3. クエリの作成 以下の内容を取得するSQL文を作成してください。
+-- 1. 全ユーザーの情報を取得する。
+-- mysql> SELECT * FROM users;
+-- +----+--------------+----------------------+---------------------+---------------------+
+-- | id | name         | email                | created_at          | updated_at          |
+-- +----+--------------+----------------------+---------------------+---------------------+
+-- |  1 | 田中太郎     | tanaka@example.com   | 2026-09-02 11:56:52 | 2026-09-02 11:56:52 |
+-- |  2 | 佐藤花子     | sato@example.com     | 2026-09-02 11:56:52 | 2026-09-02 11:56:52 |
+-- |  3 | 山本次郎     | yamamoto@example.com | 2026-09-02 11:56:52 | 2026-09-02 11:56:52 |
+-- +----+--------------+----------------------+---------------------+---------------------+
+
+-- 2. すべての商品とその在庫を取得する。
+-- mysql> SELECT name,stock FROM products;
+-- +-----------------------+-------+
+-- | name                  | stock |
+-- +-----------------------+-------+
+-- | ノートパソコン        |    20 |
+-- | スマートフォン        |    15 |
+-- | タブレット            |    30 |
+-- +-----------------------+-------+
+
+-- 3. 注文履歴を`ユーザー名`, `商品名`, `購入数量`の形式で取得する。
+-- mysql> SELECT users.name AS ユーザー名, products.name AS 商品名, orders.quantity AS 購入数量
+-- FROM orders JOIN users ON orders.user_id = users.id JOIN products ON orders.product_id = products.id;
+-- +-----------------+-----------------------+--------------+
+-- | ユーザー名      | 商品名                | 購入数量     |
+-- +-----------------+-----------------------+--------------+
+-- | 田中太郎        | ノートパソコン        |            2 |
+-- | 佐藤花子        | スマートフォン        |            1 |
+-- | 山本次郎        | タブレット            |            3 |
+-- +-----------------+-----------------------+--------------+
+
+-- 4. 在庫が不足している商品を取得する（在庫が10以下）。
+-- mysql> SELECT name AS 在庫不足商品,stock FROM products WHERE stock <= 10;
+-- Empty set (0.00 sec)
+--stockが10個以下の商品はないためempty setが返された。
+
+-- 5. 各商品の累計売上を計算して取得する。
+-- mysql> SELECT products.name AS 商品名, SUM(products.price * orders.quantity) AS 累計売上
+-- FROM orders INNER JOIN products ON orders.product_id = products.id
+-- GROUP BY products.name;
+-- +-----------------------+--------------+
+-- | 商品名                | 累計売上     |
+-- +-----------------------+--------------+
+-- | ノートパソコン        |       240000 |
+-- | スマートフォン        |        80000 |
+-- | タブレット            |       180000 |
+-- +-----------------------+--------------+
